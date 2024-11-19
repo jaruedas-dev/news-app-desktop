@@ -1,0 +1,9 @@
+<div class="container mt-5">
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    <ng-container *ngFor="let article of articles" >
+      <div class="col" *ngIf="article.is_deleted == '0'" [@simpleFadeAnimation]="'in'"  >
+        <app-news-card [article]="article"   />
+      </div>
+    </ng-container>
+  </div>
+</div>

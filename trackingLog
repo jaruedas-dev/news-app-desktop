@@ -1,0 +1,20 @@
+08-10-2024 navbarCategories - JR:
+  - ng-boostrap has been added
+  - Modified styles.css to add bootstrap styles
+  - Added environments files and folder
+  - Added components, interfaces, shared and services folder
+  - Components:
+    - categories (navbar)
+  - Interfaces:
+    - news-interface: contains news and articles interfaces
+  - Services:
+    - Added news
+  - shared:
+    - newsUPM.json - file that contains news of the UPM server for working in offline mode
+
+08-10-2024 newsCard - JR:
+  - Components:
+    - NewsCard added
+    - NewsCards Added
+  - Pipes:
+    - newsImage added

@@ -1,0 +1,24 @@
+.card-text {
+  text-align: justify !important;
+}
+
+.card-img-top {
+  object-fit: cover;
+  object-position: top;
+}
+
+.text-truncate-3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.text-truncate-1 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

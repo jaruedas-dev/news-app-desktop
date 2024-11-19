@@ -1,0 +1,7 @@
+<app-navbar
+  [categories]="categories"
+  [selectedCategory]="category"
+  (emitCategory)="changeCategory($event)"
+  (emitSearchText)="changeSearchText($event)"
+/>
+<router-outlet />

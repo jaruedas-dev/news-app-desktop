@@ -1,0 +1,169 @@
+<div class="container-fluid">
+    <fieldset class="border p-3 m-3">
+      <h1>{{!(id) ? 'Create' : 'Edit'}} Article</h1>
+      <form #newsForm="ngForm" class="row g-3" (ngSubmit)="submitForm()">
+      <div class="col-12 has-validation">
+        <label for="newsArticleTitle" class="form-label">Title</label>
+        <input
+          type="text"
+          class="form-control"
+          [ngClass]="newsTitle.touched && newsTitle.invalid ? 'is-invalid' : newsTitle.touched && newsTitle.valid ? 'is-valid' : ''"
+          id="newsArticleTitle"
+          name="newsArticleTitle"
+          placeholder="Please type the article's title"
+          aria-describedby="titleValidation"
+          minlength="6"
+          [(ngModel)]="article.title"
+          #newsTitle="ngModel"
+          highlightInput
+          required
+        >
+        <div id="titleValidation" class="invalid-feedback">
+            @if(newsTitle.errors){
+              @if(newsTitle.errors['minlength']){
+                The title must contain at least {{ newsTitle.errors['minlength']['requiredLength'] }}
+              }
+              @if(newsTitle.errors!['required']){
+                Article's Title is required
+              }
+            }
+        </div>
+      </div>
+      <div class="col-12 has-validation">
+        <label for="newsArticleSubtitle" class="form-label">Subtitle</label>
+        <input
+          id="newsArticleSubtitle"
+          name="newsArticleSubtitle"
+          highlightInput
+          #newsSubtitle="ngModel"
+          [(ngModel)]="article.subtitle"
+          type="text"
+          class="form-control"
+          [ngClass]="newsSubtitle.touched && newsSubtitle.invalid ? 'is-invalid' : newsSubtitle.touched && newsSubtitle.valid ? 'is-valid' : ''"
+          placeholder="Please type the article's subtitle"
+          aria-describedby="subtitleValidation"
+          minlength="6"
+        >
+
+        <div id="subtitleValidation" class="invalid-feedback">
+          @if(newsSubtitle.errors){
+            @if(newsSubtitle.errors['minlength']){
+              The subtitle must contain at least {{ newsSubtitle.errors['minlength']['requiredLength'] }}
+            }
+          }
+        </div>
+      </div>
+      <div class="col-md-12">
+        <label for="newsAbstract" class="form-label">Abstract</label>
+        <textarea
+          id="newsAbstract"
+          name="newsAbstract"
+          highlightInput
+          #newsAbstract="ngModel"
+          [(ngModel)]="article.abstract"
+          class="form-control"
+          [ngClass]="newsAbstract.touched && newsAbstract.invalid ? 'is-invalid' : newsAbstract.touched && newsAbstract.valid ? 'is-valid' : ''"
+          minlength="15"
+          required
+          aria-describedby="newsAbstractValidation"
+          placeholder="Provide a summary of the news' article"
+        ></textarea>
+        <div id="newsAbstractValidation" class="invalid-feedback">
+          @if(newsAbstract.errors){
+            @if(newsAbstract.errors['minlength']){
+              The abstract must contain at least {{ newsAbstract.errors['minlength']['requiredLength'] }}
+            }
+            @if(newsAbstract.errors!['required']){
+              Article's abstract is required
+            }
+          }
+        </div>
+      </div>
+      <div class="col-md-12">
+        <label for="newsAbstract" class="form-label">Content</label>
+        <textarea
+          id="newsBody"
+          name="newsBody"
+          highlightInput
+          #newsBody="ngModel"
+          [(ngModel)]="article.body"
+          class="form-control"
+          [ngClass]="newsBody.touched && newsBody.invalid ? 'is-invalid' : newsBody.touched && newsBody.valid ? 'is-valid' : ''"
+          minlength="15"
+          required
+          aria-describedby="newsBodyValidation"
+          placeholder="Provide the content of the news' article"
+        ></textarea>
+        <div id="newsBodyValidation" class="invalid-feedback">
+          @if(newsBody.errors){
+            @if(newsBody.errors['minlength']){
+              The body must contain at least {{ newsBody.errors['minlength']['requiredLength'] }}
+            }
+            @if(newsBody.errors!['required']){
+              Article's body is required
+            }
+          }
+        </div>
+      </div>
+      <div class="col-12 col-lg-6 has-validation">
+        <label for="newsCategory" class="form-label">Category</label>
+        <select
+          id="newsCategory"
+          name="newsCategory"
+          class="form-control"
+          [ngClass]="newsCategory.touched && newsCategory.invalid ? 'is-invalid' : newsCategory.touched && newsCategory.valid ? 'is-valid' : ''"
+          #newsCategory="ngModel"
+          [(ngModel)]="article.category"
+          required
+        >
+          <option value="" selected>Select a category</option>
+          <option value="{{category}}" *ngFor="let category of categories">{{ category }}</option>
+        </select>
+        <div id="categoryValidation" class="invalid-feedback">
+          @if(newsCategory.errors){
+            Please select a valid category
+          }
+        </div>
+      </div>
+      <div class="col-12 col-lg-6">
+        <label for="newsIsPublic" class="form-label">Is public?</label>
+        <select
+          id="newsIsPublic"
+          name="newsIsPublic"
+          class="form-control"
+          [(ngModel)]="article.is_public"
+        >
+          <option value="1" [selected]="article.is_public == '1'">True</option>
+          <option value="0" [selected]="article.is_public == '0'">False</option>
+        </select>
+      </div>
+      <div class="col-12">
+        <label for="newsImageDescription" class="form-label">Image Description</label>
+        <input #imageDescription type="text" id="newsImageDescription" name="newsImageDescription" highlightInput class="form-control" required>
+      </div>
+      <div class="d-flex justify-content-end" *ngIf="id">
+        <button type="button" class="btn" [ngClass]="!changeImage ? 'btn-primary' : 'btn-danger'" (click)="displayChangeImage()">{{changeImage ? 'Delete' : 'Change'}} Image</button>
+      </div>
+      <div class="alert alert-danger" *ngIf="!article.image_data" >
+        You must upload an image
+        <input type="hidden" id="newsImageData" name="newsImageData" required [(ngModel)]="article.image_data">
+      </div>
+      <div class="col-12" *ngIf="changeImage">
+        <label for="newsThumbnail" class="form-label">Thumbnail</label>
+        <input
+          #newsImage
+          type="file" id="newsThumbnail"
+          name="newsThumbnail"
+          highlightInput class="form-control" [ngClass]="!article.image_data ? 'is-invalid' : ''" accept="image/png, image/jpeg" [required]="!article.image_data" (change)="fileChangeEvent($event)">
+      </div>
+      <div class="col-12 border justify-content-center my-3 text-center" *ngIf="article.image_media_type">
+        <img class="img-fluid" [src]="article.image_data! | newsImage : article.image_media_type!" />
+      </div>
+      <div class="col-12 d-flex justify-content-between">
+        <button type="button" class="btn btn-danger" (click)="redirectHome()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!newsForm.valid">{{ !id ? "Create Article" : 'Update Article'}}</button>
+      </div>
+      </form>
+    </fieldset>
+</div>
+
