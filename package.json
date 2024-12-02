@@ -1,12 +1,16 @@
 {
   "name": "newspaper-app",
   "version": "0.0.0",
+  "main": "electron/main.js",
+  "productName": "News App",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "electron": "ng build && ELECTRON_DISABLE_SECURITY_WARNINGS=true  electron .",
+    "start-electron": "electron ."
   },
   "private": true,
   "dependencies": {
@@ -22,7 +26,8 @@
     "@popperjs/core": "^2.11.8",
     "@types/lodash": "^4.17.10",
     "bootstrap": "^5.3.3",
-    "sweetalert2": "^11.14.3",
+    "electron-store": "^10.0.0",
+    "sweetalert2": "^11.6.13",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"
   },
@@ -32,6 +37,7 @@
     "@angular/compiler-cli": "^18.2.0",
     "@angular/localize": "^18.2.0",
     "@types/jasmine": "~5.1.0",
+    "electron": "^33.2.0",
     "jasmine-core": "~5.2.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",

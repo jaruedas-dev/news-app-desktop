@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self'" />
+  <title>Title</title>
+  <style>
+    .background{
+      background: linear-gradient(#fff 30%, #3784e8);
+      width: 100%;
+      height: 100vh;
+    }
+    h1{
+      text-align: center;
+      color: #3784e8;
+      padding-top: 1rem;
+      -webkit-animation:title 2s infinite;
+      background-image:
+        linear-gradient(#FFFFFF, #3784e8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: title 35s linear infinite;
+      font-weight: bold;
+    }
+
+
+    @-webkit-keyframes shine {
+      0%, 10% {
+        background-position: -1000px;
+      }
+      20% {
+        background-position: top left;
+      }
+      90% {
+        background-position: top right;
+      }
+      100% {
+        background-position: 1000px;
+      }
+    }
+
+    .container{
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem;
+    }
+    .left img{
+      max-width: 8rem;
+      -webkit-filter: drop-shadow(5px 5px 5px #222);
+      filter: drop-shadow(5px 5px 5px #222);
+      position: absolute;
+      bottom: 1rem;
+    }
+    .right{
+      text-align: center;
+      margin-top: 3rem;
+    }
+    .footer{
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+    }
+    .shine {
+      background: #3784e8 -webkit-gradient(linear, left top, right top, from(#3784e8), to(#3784e8), color-stop(0.9, #fff)) 0 0 no-repeat;
+      -webkit-background-size: 150px;
+      color: rgba(255, 255, 255, 0.9);
+      -webkit-background-clip: text;
+      -webkit-animation-name: shine;
+      -webkit-animation-duration: 3s;
+      -webkit-animation-iteration-count: infinite;
+      text-shadow: 0 0px 0px rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="background">
+    <h1 class="shine">Newspaper App</h1>
+    <div class="container">
+      <div class="left">
+        <img src="img/men.png" alt="splash-image">
+      </div>
+      <div class="right">
+        <h2>Welcome to your reliable news APP</h2>
+        <p>Polytechnic University of Madrid</p>
+      </div>
+    </div>
+    <div class="footer">
+      Jhon Alexander Rueda Sanchez -
+      Guillermo Perez Nunez
+    </div>
+  </div>
+</body>
+</html>

@@ -1,7 +1,7 @@
 <div class="container mt-5">
-  <div class="row row-cols-1 row-cols-md-3 g-4">
+  <div class="d-flex flex-wrap gap-2">
     <ng-container *ngFor="let article of articles" >
-      <div class="col" *ngIf="article.is_deleted == '0'" [@simpleFadeAnimation]="'in'"  >
+      <div class="flex-fill col-12 col-md-3" *ngIf="article.is_deleted == '0'" [@simpleFadeAnimation]="'in'"  >
         <app-news-card [article]="article"   />
       </div>
     </ng-container>

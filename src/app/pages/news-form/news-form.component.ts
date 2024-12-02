@@ -7,9 +7,11 @@ import {SweetAlertIcon} from "sweetalert2";
 import {HighlightInputFormDirective} from "../../directives/highlight-input-form.directive";
 import {ArticleDetails} from "../../interfaces/news-interface";
 import {NewsImagePipe} from "../../pipes/news-image.pipe";
+import {ElectronService} from "../../services/electron.service";
 import {LoginService} from "../../services/login.service";
 import {NewsService} from "../../services/news.service";
 import {UiToolsService} from "../../services/ui-tools.service";
+import {isElectron} from "../../shared/functions";
 
 @Component({
   selector: 'app-news-form',
@@ -58,6 +60,7 @@ export class NewsFormComponent implements OnInit {
                   private router: Router,
                   private uiToolsService: UiToolsService,
                   private loginService: LoginService,
+                  private electronService: ElectronService,
               ) {
     this.id = activatedRoute.snapshot.params['id'];
     if(!this.id){
@@ -68,7 +71,11 @@ export class NewsFormComponent implements OnInit {
   ngOnInit() {
     if(!this.loginService.isLogged()){
       this.router.navigate(['/']).then( () => {
-        this.uiToolsService.displayMessage('Unauthorized', 'You are not authorized!', 'error');
+        if(isElectron()){
+          this.electronService.displayMessage("Unauthorized", "You are not authorized!");
+        }else{
+          this.uiToolsService.displayMessage('Unauthorized', 'You are not authorized!', 'error');
+        }
       });
     }
     this.newsService.getCategories().subscribe( (categories) => {
@@ -85,7 +92,6 @@ export class NewsFormComponent implements OnInit {
 
   fileChangeEvent(fileInput: any) {
     this.imageError = null;
-    console.log(fileInput);
     if (fileInput.target.files && fileInput.target.files[0]) {
       // Size Filter Bytes
       const MAX_SIZE = 20971520;
@@ -139,9 +145,19 @@ export class NewsFormComponent implements OnInit {
       if(this.article.hasOwnProperty('id')){
         delete this.article.id
       }
-      this.confirmAction('create', 'Are you sure?', 'This article will be created!', 'Yes, Create it!')
+      if(isElectron()){
+          this.confirmActionElectron('create', 'Are you sure?', 'This article will be created!', 'Yes, Create it!');
+      }else{
+        this.confirmAction('create', 'Are you sure?', 'This article will be created!', 'Yes, Create it!')
+      }
+
     }else{
-      this.confirmAction('edit', 'Are you sure?', 'Do you want to edit the article?', 'Yes, Edit!')
+      if(isElectron()) {
+        this.confirmActionElectron('edit', 'Are you sure?', 'Do you want to edit the article?', 'Yes, Edit!');
+      }else{
+        this.confirmAction('edit', 'Are you sure?', 'Do you want to edit the article?', 'Yes, Edit!');
+      }
+
     }
   }
 
@@ -171,4 +187,37 @@ export class NewsFormComponent implements OnInit {
         }
       })
   }
+
+   private async confirmActionElectron(action: string, title: string, message: string, confirmButtonText: string) {
+    const confirmed = await this.electronService.showConfirmDialog({
+      title: title,
+      message: message,
+      action: confirmButtonText
+    });
+
+    if (confirmed) {
+      switch(action) {
+        case 'edit':
+          this.newsService.updateArticle(this.article).subscribe( (resp) => {
+            if(resp['status'] == '200'){
+              this.router.navigate([`/articles/${this.id}`])
+                .then( () => {
+                  this.electronService.displayMessage('success', 'Article has been updated');
+                } )
+            }
+          })
+          break;
+        case 'create':
+          this.newsService.createArticle(this.article).subscribe((resp2) => {
+            if(resp2['status'] == 200){
+              this.router.navigate(['/'])
+                .then( () => this.electronService.displayMessage('success', 'Article has been created successfully'))
+            }
+          })
+          break;
+      }
+    }
+  }
+
+
 }

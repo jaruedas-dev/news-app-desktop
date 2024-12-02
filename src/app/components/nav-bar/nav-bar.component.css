@@ -3,3 +3,14 @@
   color: white !important;
   font-weight: bolder !important;
 }
+
+
+@media screen and (max-width: 1024px){
+  .nav-item{
+    display: block;
+    width: 100%;
+  }
+  .nav{
+    margin-bottom: 1rem;
+  }
+}
