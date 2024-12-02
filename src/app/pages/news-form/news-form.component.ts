@@ -110,9 +110,8 @@ export class NewsFormComponent implements OnInit {
       reader.onload = (e: any) => {
         const image = new Image();
         image.src = e.target.result;
-        image.onload = rs => {
-          const imgBase64Path = e.target.result;
-          this.cardImageBase64 = imgBase64Path;
+        image.onload = () => {
+          this.cardImageBase64 = e.target.result;
           this.isImageSaved = true;
 
           this.article.image_media_type = fileInput.target.files[0].type;
@@ -213,7 +212,7 @@ export class NewsFormComponent implements OnInit {
               this.router.navigate(['/'])
                 .then( () => this.electronService.displayMessage('success', 'Article has been created successfully'))
             }
-          })
+          }, (error:any) => this.electronService.displayMessage('error', 'An error occurred while creating the article, ' + error.message));
           break;
       }
     }

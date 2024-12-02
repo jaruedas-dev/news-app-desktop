@@ -2,7 +2,6 @@ import {NgIf} from "@angular/common";
 import {Component, Input, OnInit} from '@angular/core';
 import {RouterLink} from "@angular/router";
 import {Article} from "../../interfaces/news-interface";
-import {User} from "../../interfaces/user-interface";
 import {NewsImagePipe} from "../../pipes/news-image.pipe";
 import {ElectronService} from "../../services/electron.service";
 import {LoginService} from "../../services/login.service";
@@ -42,9 +41,7 @@ export class NewsCardComponent implements OnInit {
 
   exportArticle(article: Article) {
     console.log(article);
-    this.electronService.exportArticle(article).then( (data) => {
-      console.log(data);
-    });
+    this.electronService.exportArticle(article);
   }
 
   async deleteArticle(id: string | undefined) {

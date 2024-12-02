@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Menu, Notification, IpcRenderer, dialog, nativeTheme } = require("electron");
+const { app, BrowserWindow, ipcMain, Menu, Notification, dialog, nativeTheme } = require("electron");
 const isMac = process.platform === "darwin";
 const path = require('path');
 const os = require('os');
@@ -132,11 +132,11 @@ ipcMain.on('get-initial-theme', (event) => {
 
 
 ipcMain.handle( 'export-article', (event, article) => {
-  const {image_data, ...articleWithoutImage } = article
+  //const {image_data, ...articleWithoutImage } = article
   try {
     const exportPath = path.join(os.homedir(), 'Desktop',
       `article_${Date.now()}.json`);
-    const articleData = JSON.stringify(articleWithoutImage, null, 2)
+    const articleData = JSON.stringify(article, null, 2)
     fs.writeFileSync(exportPath, articleData, 'utf8')
     dialog.showMessageBox({
       type: 'info',
@@ -147,6 +147,21 @@ ipcMain.handle( 'export-article', (event, article) => {
   }catch(error){
     return {success: false, path: error.message};
   }
+});
+
+ipcMain.handle( 'import-article', async (event, body) => {
+  const result = await dialog.showOpenDialog({
+  properties: ['openFile'],
+  filters: [{ name: 'JSON Files', extensions: ['json'] }],
+  })
+  if (result.canceled || result.filePaths.length === 0) {
+    return { success: false, error: 'No file selected' }
+  }
+  const filePath = result.filePaths [0]
+  const fileContent = fs. readFileSync(filePath, 'utf8')
+  const article = JSON. parse (fileContent)
+
+  return {success: true, article}
 });
 
 

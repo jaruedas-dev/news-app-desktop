@@ -98,7 +98,13 @@ export class ElectronService {
   }
 
   exportArticle(article: Article){
-    return this.ipcRenderer.invoke('export-article', article);
+    this.ipcRenderer.invoke('export-article', article);
+  }
+
+  async importArticle(): Promise<Article> {
+    const result: { article: Article; success: boolean } =
+      await this.ipcRenderer.invoke('import-article',)
+    return result.article
   }
 
 }

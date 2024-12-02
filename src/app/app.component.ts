@@ -29,19 +29,17 @@ export class AppComponent implements OnInit{
     private loginService: LoginService) {}
 
   ngOnInit(): void {
-    let logged = false;
     if(isElectron()){
-
-
       this.electronService.setTheme();
 
       this.loginService.isUserLoaded().subscribe(userLoaded => {
         if (userLoaded) {
-          this.loginService.isLoggedIn().subscribe(isLoggedIn => {
+          this.loginService.isLoggedIn().subscribe(() => {
             this.user = this.loginService.getUser();
 
             if(this.user) {
               this.electronService.displayMessage("Welcome", `Welcome back ${this.user!.username}`);
+              this.newsService.updateApiKey(this.user.token);
             }
           });
         }
