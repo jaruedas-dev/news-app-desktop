@@ -16,12 +16,19 @@ export class ElectronService {
     this.theme = (window as any).electron.theme.initialTheme;
   }
 
-  displayMessage(title: string, message: string) {
+  displayMessage(title: string, message: string, callback: any = null) {
     this.ipcRenderer.invoke('show-notification', {
       title: title,
       message: message,
       callbackEvent: 'notification-clicked-answer',
     });
+
+
+    this.ipcRenderer.on('notification-clicked', () => {
+      if(callback instanceof Function) callback();
+    });
+
+
   }
 
   saveData(key: string, data: any) {

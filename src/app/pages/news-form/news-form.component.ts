@@ -1,5 +1,5 @@
 import {JsonPipe, NgClass, NgForOf, NgIf} from "@angular/common";
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {FormsModule, NgForm} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import * as _ from 'lodash';
@@ -61,6 +61,7 @@ export class NewsFormComponent implements OnInit {
                   private uiToolsService: UiToolsService,
                   private loginService: LoginService,
                   private electronService: ElectronService,
+                  private renderer: Renderer2
               ) {
     this.id = activatedRoute.snapshot.params['id'];
     if(!this.id){
@@ -139,7 +140,30 @@ export class NewsFormComponent implements OnInit {
   }
 
   submitForm() {
-    if(this.newsForm.invalid) return;
+    if(this.newsForm.invalid) {
+      //console.log(this.newsForm.errors);
+      // Iterate through the form controls
+      for (const key in this.newsForm.controls) {
+        if (this.newsForm.controls.hasOwnProperty(key)) {
+          const control = this.newsForm.controls[key];
+
+          // Check if the control is invalid
+          if (control.invalid) {
+            this.electronService.displayMessage("Field error", "Field error", () => {
+              const invalidControl = this.renderer.selectRootElement(`[name="${key}"]`, true);
+              this.uiToolsService.displayToastMessage("A field content errors, please fix it and try again.", "error").then();
+              invalidControl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              invalidControl.focus();
+            });
+
+            break; // Stop after focusing the first invalid control
+          }
+        }
+      }
+
+
+      return;
+    }
     if(!this.id){
       if(this.article.hasOwnProperty('id')){
         delete this.article.id
