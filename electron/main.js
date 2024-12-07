@@ -3,6 +3,7 @@ const isMac = process.platform === "darwin";
 const path = require('path');
 const os = require('os');
 const fs = require('fs');
+"use strict";
 
 async function createMainWindow(){
   const Store = (await import('electron-store')).default;
@@ -14,7 +15,7 @@ async function createMainWindow(){
     title: "NewsApp",
     resizable: true,
     show: false,
-    autoHideMenuBar: true,
+    autoHideMenuBar: false,
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: true,
@@ -27,7 +28,7 @@ async function createMainWindow(){
   appWin.on("closed", () => {
     appWin = null;
   });
-  appWin.webContents.openDevTools();
+  //appWin.webContents.openDevTools();
   appWin.show();
 
   ipcMain.handle('store-get', (event, key) => {
@@ -90,7 +91,7 @@ async function createSplashScreen (){
   splash.loadURL(`file://${__dirname}/splash/index.html`);
   splash.show()
   setTimeout(function () {
-    splash.close();
+    splash.hide();
     createMainWindow();
   }, 6000);
 }
@@ -102,6 +103,7 @@ async function createAbout(){
     title: "About",
     frame: true,
     resizable: false,
+    fullscreenable: false,
     autoHideMenuBar: true
   });
   about.on("closed", () => {
@@ -205,6 +207,7 @@ app.whenReady().then( () => {
 
   const mainMenu = Menu.buildFromTemplate(menu)
   Menu.setApplicationMenu(mainMenu);
+
 
   app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {

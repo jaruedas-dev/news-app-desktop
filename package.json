@@ -1,6 +1,6 @@
 {
   "name": "newspaper-app",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "main": "electron/main.js",
   "productName": "News App",
   "scripts": {
@@ -9,8 +9,9 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "electron": "ng build && ELECTRON_DISABLE_SECURITY_WARNINGS=true  electron .",
-    "start-electron": "electron ."
+    "electron": "ng build && ELECTRON_DISABLE_SECURITY_WARNINGS=true electron .",
+    "start-electron": "electron .",
+    "package": "electron-builder"
   },
   "private": true,
   "dependencies": {
@@ -38,6 +39,7 @@
     "@angular/localize": "^18.2.0",
     "@types/jasmine": "~5.1.0",
     "electron": "^33.2.0",
+    "electron-builder": "^25.1.8",
     "jasmine-core": "~5.2.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
@@ -45,5 +47,25 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.5.2"
+  },
+  "build": {
+    "appId": "com.example.newspaperapp",
+    "productName": "News App",
+    "directories": {
+      "buildResources": "electron/icons/"
+    },
+    "files": [
+      "dist/newspaper-app",
+      "electron/"
+    ],
+    "win": {
+      "icon": "electron/icons/news27_42521.ico"
+    },
+    "mac": {
+      "icon": "electron/icons/news27_42521.icns"
+    },
+    "linux": {
+      "icon": "electron/icons/news27_42521.png"
+    }
   }
 }
